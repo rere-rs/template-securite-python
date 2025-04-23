@@ -1,16 +1,23 @@
 from src.tp1.utils.lib import choose_interface
-
+from src.tp1.utils.config import logger
+from scapy.all import sniff, Packet
+from typing import List
 
 class Capture:
     def __init__(self) -> None:
         self.interface = choose_interface()
         self.summary = ""
+        self.packets: List[Packet] = []
 
     def capture_trafic(self) -> None:
         """
         Capture network trafic from an interface
         """
         interface = self.interface
+        logger.info(f"Starting capture on interface: {self.interface}")
+        # Utilisation de sniff() pour capturer les paquets
+        self.packets = sniff(iface=self.interface, timeout=30)
+        logger.info(f"Capture complete. {len(self.packets)} packets captured.")
 
     def sort_network_protocols(self) -> None:
         """
