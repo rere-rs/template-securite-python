@@ -1,5 +1,8 @@
 import pygal
 from src.tp1.utils.config import logger
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+
 
 class Report:
     def __init__(self, capture, filename, summary):
@@ -23,10 +26,33 @@ class Report:
         return content
 
     def save(self, filename: str) -> None:
-        final_content = self.concat_report()
-        with open(self.filename, "w") as report:
-            report.write(final_content)
-        logger.info(f"Report saved in {self.filename}")
+        """
+        Properly save the report as a real PDF using reportlab
+        """
+        c = canvas.Canvas(filename, pagesize=letter)
+        width, height = letter
+
+        # Starting y position
+        y = height - 50
+
+        # Add Title
+        c.setFont("Helvetica-Bold", 16)
+        c.drawString(50, y, self.title.strip())
+        y -= 40
+
+        # Add Summary
+        c.setFont("Helvetica", 12)
+        for line in self.summary.splitlines():
+            c.drawString(50, y, line)
+            y -= 20
+
+        # Add Table
+        for line in self.array.splitlines():
+            c.drawString(50, y, line)
+            y -= 20
+
+        c.save()
+        logger.info(f"Real PDF saved at {filename}")
 
     def generate(self, param: str) -> None:
         """

@@ -13,6 +13,7 @@ pygal = "^3.0.5"
 fpdf2 = "^2.8.1"
 pytest = "^8.3.5"
 pytesseract = "^0.3.13"
+reportlab = "^4.4.0"
 
 [build-system]
 requires = ["poetry-core"]
